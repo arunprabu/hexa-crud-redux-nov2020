@@ -1,0 +1,76 @@
+Routing Instructions
+=====
+
+Step 1:
+  identify the URL's 
+
+  localhost:3000  
+  localhost:3000/posts
+  localhost:3000/posts/new 
+  localhost:3000/posts/1
+  localhost:3000/about 
+
+Step 2:
+  Add the Links for the URL's in Menu Comp
+
+Step 3: 
+  Identify the URL's and the matching comp's 
+  
+  localhost:3000          -- Home   - Fn Comp Arrow Fn 
+  localhost:3000/posts    -- Posts  - Class Comp 
+  localhost:3000/about    -- About  - Fn Comp Arrow Fn
+
+  Note: Follow Proper Folder Structure
+  src/
+    components/
+      shared/
+        Header/
+        Footer/
+        Menu/
+      Home/
+        Home.js
+      About/
+        About.js 
+    containers/
+      Posts/
+        Posts.js   
+
+
+Step 4: 
+  We need to load the matching components for each of the above URL's .
+  So, find a package that will help us setup SPA 
+  react-router-dom is the package 
+  npm i react-router-dom 
+
+Step 5:
+  Setup routing in App.js 
+  
+  <BrowserRouter>
+    <!-- you app should be here -->
+  </BrowserRouter>
+
+Step 6: 
+  Configuring the routes
+  We need to load the matching components for each of the above URL's.
+  in between header and footer comp's, configure the routes 
+
+  <Switch>
+    <Route path='/' component={Home} exact/>
+    <Route path='/posts' component={Posts} />
+    <Route path='/about' component={About} />
+  </Switch>
+
+  Have the necessary imports from react-router-dom
+
+Step 7:
+  Check the app! It will work.. but the page will reload. Let's fix it. 
+  in Menu component, replace a href with  Link
+
+
+
+
+
+
+
+
+
