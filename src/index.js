@@ -7,21 +7,40 @@ import reportWebVitals from './reportWebVitals';
 // Step 0: npm i redux react-redux
 
 // Step 1: Let's begin with creating a store
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux'; 
+// step 14.3 - use redux-thunk middleware for async actions -- Refer the above line
 
 // Step 5: 
 //let’s import the combineReducer 
 //and pass it to the store as an argument.
 import rootReducers from './reducers'; 
 
-// Step 2:  Exec createStore() method and save it in a variable 
-const store = createStore(rootReducers); //this needs a special argument called 'reducer'
-// [Refer reducers/postReducer.js] -- for Step 3
+// Step 6: Let's work on providing the store dato to the entire comp
+//  [In src/index.js] inside the ReactDOM.render() block,
+// Provide the store data to the entire app 
+import { Provider } from 'react-redux'; 
+//Definition: The Provider component uses something 
+//called as React Context which allows you to pass the 
+//store object to any components 
+//that needs to access it without the need to pass props.
+//Provider should be imported from react-redux 
+// Refer [actions/types.js] for Step 7
 
+// Step 14.2
+// setting up logger middleware and redux-thunk middleware
+import logger from 'redux-logger'; // npm i redux-logger 
+import thunk from 'redux-thunk';  //npm i redux-thunk
+
+// Step 2:  Exec createStore() method and save it in a variable 
+const store = createStore(rootReducers, applyMiddleware(thunk, logger)); //this needs a special argument called 'reducer'
+// [Refer reducers/postReducer.js] -- for Step 3
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    {/* this is how we have to provide store data to the app  */}
+    <Provider store={store}> 
+      <App />
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

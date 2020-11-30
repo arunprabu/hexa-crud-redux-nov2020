@@ -75,6 +75,206 @@ Step 5: in src/index.js, Setup reducer for the store
 
 
 
+Step 6: In src/index.js, inside the ReactDOM.render() block,
+  Provide the store data to the entire app 
+    
+    For the following to work.. 
+    import { Provider } from 'react-redux'; 
+
+    //Definition: The Provider component uses something 
+      //called as React Context which allows you to pass the 
+      //store object to any components 
+      //that needs to access it without the need to pass props.
+      //Provider should be imported from react-redux 
+    
+    ReactDOM.render(
+      <React.StrictMode>
+        <Provider store={store}>   <!-- this is how we have to provide store data to the app -->
+          <App />
+        </Provider>
+      </React.StrictMode>
+    ,
+    document.getElementById('root')
+  );
+
+=====
+
+Step 7:
+  create actions/types.js file for the various actions of the app's feature 
+  have the following code in it.
+
+  export const ADD_POST = 'ADD_POST';
+  export const GET_POSTS = 'GET_POSTS';
+  export const GET_POST_BY_ID = 'GET_POST_BY_ID';
+  export const EDIT_POST = 'EDIT_POST';
+  export const DELETE_POST = 'DELETE_POST';
+
+====
+
+Step 8:
+  Have reducers/postReducer.js to have better switch case statement 
+  with much more scalable code by using the action types 
+
+  import { ADD_POST, GET_POSTS, EDIT_POST, DELETE_POST } from "../actions/types";
+    
+  const postReducer = (state = [], action) => {
+    // Step 8.1 
+      //now it is time to understand the concept called 'Actions'
+      //What are Actions? 
+        //Actions are plain Javascript objects with a type property. 
+        //This type property describes the event that is taking place 
+        //in the application.
+    switch(action.type) {
+      case ADD_POST:
+        //Step 8.2 - clarification - of the following code, 
+        //action.type = Event and action.data = Form Data from Add Post
+        return state;
+    }
+  }
+
+
+Step 9:
+  Almost done... 
+  to dispatch action, let's write form submit logic in PostForm.js
+  // Step 9.1
+  form code can be  the following with ref's and submission logic 
+    <form onSubmit={this.handleSubmit}>
+      <input required type="text"
+        placeholder="Enter Post Title"
+        className='form-control' ref={(input) => this.getTitle = input} /><br />
+      <textarea required rows="5" cols="28"
+        placeholder="Enter Post"
+        className='form-control' ref={(input) => this.getContent = input} /><br />
+      <button className='btn btn-primary' type='submit'>Post</button>
+    </form>
+
+    // Step 9.2 then, work on handleSubmit method 
+    handleSubmit = (e) => {
+      e.preventDefault();
+      const title = this.getTitle.value;
+      const body = this.getContent.value;
+      const data = {
+        id: new Date(),
+        title,
+        body
+      }
+      console.log(data);
+    }
+
+
+Step 10:
+  In the same PostForm.js component, 
+  import {connect} from 'react-redux';
+  
+  // Step 10.1
+  //last line of the compoent should be the following. 
+  // after connecting props will be available in this component. 
+  
+  export default connect()(PostForm); 
+
+
+Step 11: 
+  It is time to dispatch actions from form submission logic 
+  // connect() helps props have dispatch method
+  // using it we can dispatch action with type and data (payload)
+  so, inside the handleSubmit logic, have a console.log(this.props);
+  
+  handleSubmit = (e) => {
+    e.preventDefault();
+    const title = this.getTitle.value;
+    const body = this.getContent.value;
+    const data = {
+      id: new Date(),
+      title,
+      body
+    }
+    console.log(data);
+    console.log(this.props);
+  }
+
+
+
+=====
+Step 12: 
+  Create a file services/postService.js 
+  and then have the following logic in it
+
+  import axios from 'axios';
+  import { ADD_POST } from "../actions/types";
+  const POSTS_API_URL = 'https://jsonplaceholder.typicode.com/posts';
+
+  export const createPost = (data) => {
+    return (dispatch) => {
+      // AJAX call to add a post
+      return axios.post(POSTS_API_URL, data )
+        .then(response => {
+            dispatch({
+              type: ADD_POST,
+              payload: {
+                id: response.data.id,
+                title: response.data.title,
+                body: response.data.body
+              }
+            });
+        })
+        .catch(error => {
+            throw (error);
+        })
+        .finally( () => {
+          
+        }) 
+    };
+  };
+
+======
+Step 13: 
+  Dispatch the action in PostForm.js submission logic
+
+  import { createPost } from '../../services/postService';
+
+  handleSubmit = (e) => {
+      e.preventDefault();
+      const title = this.getTitle.value;
+      const body = this.getContent.value;
+      const data = {
+        id: new Date(),
+        title,
+        body
+      }
+      console.log(data);
+      console.log(this.props);
+      this.props.dispatch(createPost( data )); // this is the service method
+    }
+  
+Step 14: 
+  Check the error in console and fix it..
+  The error says...
+  Uncaught Error: Actions must be plain objects. Use custom middleware for async actions.
+
+  // Step 14.1
+  install the following packages.
+    npm i redux-logger redux-thunk
+  
+  // Step 14.2
+  then, go to src/index.js 
+    import logger from 'redux-logger'; // npm i redux-logger 
+    import thunk from 'redux-thunk';  //npm i redux-thunk
+
+  // step 14.3
+  use redux-thunk middleware for async actions
+    import { createStore, applyMiddleware } from 'redux';
+  
+    const store = createStore( rootReducers, applyMiddleware(thunk, logger) );
+
+===
+Step 15: 
+  Check the app.. try creating a blog post.. it should work well. 
+  we should be able to create a blog post.  (POST method is over)
+
+  Create blog post operation is over. 
+  Now, let's work on Listing Blog posts (Read operation)
+
+
 
 
 
