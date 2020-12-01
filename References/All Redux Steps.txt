@@ -1,11 +1,74 @@
+Redux 
+---
+Step 0: 
+  npm i redux react-redux 
+
+  redux  - core redux framework 
+  react-redux   -- patches up react with redux seamlessy 
+
+Step 1: 
+  In src/index.js Setup the the Redux Store here
+  import { createStore } from 'redux';
 
 
+Step 2: 
+  Exec createStore() method and save it in a variable 
+  const store = createStore(); //this needs a special argument called 'reducer'
 
 
+Step 3: [Refer reducers/postReducer.js]  Setup Reducer for the store
+  What's a Reducer?
+    It is a function that takes the current state and 
+    an action that was dispatched as it’s parameters and returns the new state.
+
+  In reducers/postReducer.js, Have the following code 
+
+    // Setting up postReducer so that
+    // we can combine this reducer with other reducers later 
+    // and make a big object for the store 
+    // reducer should mandatorily return a state. 
+    const postReducer = (state = [], action) => {
+      switch(action.type) {
+        case 'ADD_POST':
+          return state.concat([action.data]);
+        default:
+          return state;
+      }
+    }
+    export default postReducer;
+
+  ====
 
 
+Step4: in reducers/index.js 
+  work on combining all reducers for the entire app
+  and have the following code 
+
+    //Step 4.1: Combining Reducers using Redux's combineReducers
+    import {combineReducers} from 'redux';
+
+    //Step 4.2 loading all reducers
+    import postReducer from './postReducer'; 
+
+    ////Step 4.3 combine all reducers into one big object for store
+    const rootReducers = combineReducers({
+      posts: postReducer
+    });
+
+    //Step 4.4 exporing the rootReducer -- that is the combined reducer
+    export default rootReducers; 
+
+====
 
 
+Step 5: in src/index.js, Setup reducer for the store
+  //let’s import the combineReducer 
+  //and pass it to the store as an argument.
+  
+  import rootReducers from './reducers'; 
+  const store = createStore(rootReducers); 
+
+=====
 
 
 Step 6: In src/index.js, inside the ReactDOM.render() block,
@@ -99,7 +162,6 @@ Step 9:
       const title = this.getTitle.value;
       const body = this.getContent.value;
       const data = {
-        id: new Date(),
         title,
         body
       }
@@ -127,7 +189,6 @@ Step 11:
       const title = this.getTitle.value;
       const body = this.getContent.value;
       const data = {
-        id: new Date(),
         title,
         body
       }
@@ -179,7 +240,6 @@ Step 13:
       const title = this.getTitle.value;
       const body = this.getContent.value;
       const data = {
-        id: new Date(),
         title,
         body
       }
@@ -331,6 +391,7 @@ Step 19:
 
 ====
 Step 20: 
+
   Check the app! The app should display all posts on load. 
   Read operation is also over. (GET method)
 
@@ -474,7 +535,7 @@ Step 29:
   The data from the backend is wrong.. 
   because of it our app doesn't work well for delete action. 
 
-  we have filter the items from postReducer's switch case... 
+  we have to filter the items from postReducer's switch case... 
 
 ===
 Step 30: 

@@ -20,7 +20,8 @@ function App() {
             <Route path='/' component={Home} exact/>
             <Route path='/posts' component={Posts} exact/>
             <Route path='/posts/new' component={PostForm} exact/>
-            <Route path='/posts/1' component={PostDetails} exact/>
+            {/* URL Param is in the following URL - postId is the URL Param */}
+            <Route path='/posts/:postId' component={PostDetails} exact/> 
             <Route path='/about' component={About} exact/>
           </Switch>
         </div>

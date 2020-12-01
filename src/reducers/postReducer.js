@@ -14,7 +14,7 @@
 // reducer should mandatorily return a state.
 // [Refer reducers/index.js] - for Step 4
 
-import { ADD_POST  } from "../actions/types";
+import { ADD_POST, DELETE_POST, EDIT_POST, GET_POSTS, GET_POST_BY_ID  } from "../actions/types";
 
 const postReducer = (state = [], action) => {
   // Step 8: 
@@ -35,6 +35,14 @@ const postReducer = (state = [], action) => {
 
         // For Step 9-- Refer [PostForm.js]
         return state.concat(action.payload);
+      case GET_POSTS:
+        return action.posts;
+      case GET_POST_BY_ID:
+        return action.post;
+      case EDIT_POST:
+        return action.post;
+      case DELETE_POST:
+        return action.post;
       default:
         return state;
     }

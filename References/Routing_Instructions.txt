@@ -57,7 +57,7 @@ Step 6:
   <Switch>
     <Route path='/' component={Home} exact/>
     <Route path='/posts' component={Posts} />
-    <Route path='/posts/add' component={PostForm} />
+    <Route path='/posts/new' component={PostForm} />
     <Route path='/posts/1' component={PostDetails} />
     <Route path='/about' component={About} />
   </Switch>

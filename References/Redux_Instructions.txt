@@ -278,7 +278,131 @@ Step 15:
 
 
 
+====
+Step 16: 
+  in PostList.js, let's get the state data from the store and 
+  convert them into read-only props. 
+  Redux's core purpose is to get rid of state across the app and make it props. 
 
+  // Step 16.1
+    import { connect } from 'react-redux';
+
+  // Step 16.2
+  to get the state and to convert that to props 
+  in the PostList.js file, make the following change in the export.
+
+    export default connect(mapStateToProps)(PostList);
+  
+  //mapStateToProps() method should be defined in the same file before the export
+  
+    const mapStateToProps = (state) => {
+      return {
+          posts: state.posts
+      }
+    } 
+  
+  The above function will convert state to props for the PostList compoent.
+  By doing the above this comp will no longer have state. 
+
+
+=====
+Step 17: 
+  Work within PostList.js Component's render method 
+
+  have the following lists and key 
+    render() {
+      let posts = null;
+      if(this.props.posts && this.props.posts.length > 0){
+        posts = this.props.posts.map((post) =>{
+          console.log(post);
+          return(
+            <Post id={post.id} 
+              title={post.title} 
+              message={post.body} key={post.id}></Post>
+          )
+        });
+      }
+
+      return (
+        <div className='container'>
+          <h3>Post List</h3>
+          { this.props.posts && this.props.posts.length > 0? 
+            posts
+            :
+            <div className='alert alert-danger'>
+              No Posts Found. You can add one!
+            </div>
+          }
+        </div>
+      );
+    }
+
+Step 18:
+====
+  Now, let's think about getting all posts on load 
+  
+  Note: 
+  if the post list should be loaded for the home page to display...
+  then, in src/index.js we have to write logic to load posts at first.
+
+    import { getAllPosts } from './services/postsService';
+    
+    //To Setup Initial Loading -- for diplaying something at first load -- from rest api call
+    store.dispatch(getAllPosts());
+
+  ------ 
+  But, our home page url should not show the all posts. But posts url.
+  So, we have to now dispatch an action to getAllPosts in PostList.js 
+    import { getAllPosts } from './services/postsService';
+
+  Then, Inside the life cycle hook, 
+
+    componentDidMount(){
+      // send ajax calls to load all posts..
+      // dispatch event 
+      this.props.dispatch(getAllPosts());
+    }
+
+====
+Step 19: 
+  So, services/postService.js should have the following code. 
+
+    // receiving response data as posts and attaching an event type 
+    // called GET_POSTS and all the posts and returned to postReducer
+    export const getPosts = (posts) => {
+      return {
+        type: GET_POSTS,
+        posts
+      }
+    };
+
+    //Initial Load to fetch all posts
+    export const getAllPosts = () => {
+      return (dispatch) => {
+        return axios.get(POSTS_API_URL)
+          .then(response => {
+            //calling the above util method to process data, 
+            // that are ready to be sent to post reducer
+            dispatch(getPosts(response.data))
+          })
+          .catch(error => {
+            throw(error);
+          });
+      };
+    };
+
+====
+Step 20: 
+  After the dispatching from service, get the data in the reducer. 
+  inside switch case in postReducer.js -- have the following
+  
+  case GET_POSTS:
+    return state.concat(action.payload);
+
+  Check the app! The app should display all posts on load. 
+  Read operation is also over. (GET method)
+
+=====
 
 
 
