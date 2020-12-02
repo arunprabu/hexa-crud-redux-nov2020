@@ -1,8 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import 'react-redux-toastr/lib/css/react-redux-toastr.min.css'
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+
+import ReduxToastr from 'react-redux-toastr'
+
 
 // Step 0: npm i redux react-redux
 
@@ -30,9 +34,11 @@ import { Provider } from 'react-redux';
 // setting up logger middleware and redux-thunk middleware
 import logger from 'redux-logger'; // npm i redux-logger 
 import thunk from 'redux-thunk';  //npm i redux-thunk
+// to setup redux devtools
+import { composeWithDevTools } from 'redux-devtools-extension';
 
 // Step 2:  Exec createStore() method and save it in a variable 
-const store = createStore(rootReducers, applyMiddleware(thunk, logger)); //this needs a special argument called 'reducer'
+const store = createStore(rootReducers, composeWithDevTools(applyMiddleware(thunk, logger))); //this needs a special argument called 'reducer'
 // [Refer reducers/postReducer.js] -- for Step 3
 
 ReactDOM.render(

@@ -50,7 +50,7 @@ export const getPosts = () => {
 
               dispatch({
                 type: GET_POSTS,
-                posts: res.data
+                postList: res.data
               });
             })
             .catch( (err) => {

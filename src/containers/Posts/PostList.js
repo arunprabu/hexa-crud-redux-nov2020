@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom';
 
 /* Step 16: 
   in PostList.js, let's get the state data from the store and 
@@ -10,6 +9,7 @@ import { Link } from 'react-router-dom';
 // Step 16.1
 import { connect } from 'react-redux';
 import { getPosts } from '../../services/postService';
+import Post from '../../components/Posts/Post';
 
 class PostList extends Component {
 
@@ -25,23 +25,14 @@ class PostList extends Component {
     console.log(this.props);
 
     let posts = null;
-    if(this.props.posts && this.props.posts.length > 0){
-      posts = this.props.posts.map( (post, index) => {
+    if(this.props.postList && this.props.postList.length > 0){
+      posts = this.props.postList.map( (post, index) => {
         return(
-          <div className="list-group" key={index}>
-            <div className="list-group-item list-group-item-action">
-              <div className="d-flex w-100 justify-content-between">
-                <h5 className="mb-1">
-                <Link to={`/posts/${post.id}`}>{post.title}</Link>
-                </h5>
-                <small>Post Id: {post.id}</small>
-              </div>
-              <p className="mb-1">
-                {post.body}
-              </p>
-              <small>UserId: {post.userId}</small>
-            </div>
-          </div>
+          <Post key={index} 
+                title={post.title}
+                body={post.body}
+                id={post.id}
+                userId={post.userId}></Post>
         )
       });
     }
@@ -51,7 +42,7 @@ class PostList extends Component {
       <div className='container'>
         <h3>Post List</h3>
       
-        { this.props.posts && this.props.posts.length? 
+        { this.props.postList && this.props.postList.length? 
           posts
           :
           <div className='alert alert-warning'>
@@ -70,7 +61,7 @@ in the PostList.js file, make the following change in the export. */
 const mapStateToProps = (state) => {
   console.log(state);
   return {
-    posts: state.posts
+    postList: state.postData.postList
   }
 }
 export default connect(mapStateToProps)(PostList);

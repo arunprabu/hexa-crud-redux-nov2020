@@ -16,7 +16,12 @@
 
 import { ADD_POST, DELETE_POST, EDIT_POST, GET_POSTS, GET_POST_BY_ID  } from "../actions/types";
 
-const postReducer = (state = [], action) => {
+const initialPostData = {
+  postList: [],
+  post: {}
+}
+
+const postReducer = (state = initialPostData, action) => {
   // Step 8: 
   /* Have [reducers/postReducer.js] to have better switch case statement 
   with much more scalable code by using the action types  */
@@ -34,15 +39,40 @@ const postReducer = (state = [], action) => {
         // and action.data = Form Data from Add Post
 
         // For Step 9-- Refer [PostForm.js]
-        return state.concat(action.payload);
+        
+        // This step is to update the state data object
+        // Further Read: https://redux.js.org/recipes/structuring-reducers/immutable-update-patterns
+        let newAddPostState = {
+          postList: [...state.postList, action.payload],
+          post: {}
+        } 
+        return newAddPostState;
       case GET_POSTS:
-        return action.posts;
+        //state.postList = action.postList;// -- won't work - Reason: https://redux.js.org/recipes/structuring-reducers/immutable-update-patterns
+        let newGetPostsState = {
+          postList: action.postList,
+          post: state.post
+        } 
+        return newGetPostsState;
       case GET_POST_BY_ID:
-        return action.post;
+        //state.post = action.post -- won't work
+        let newGetPostByIdState = {
+          postList: [...state.postList],
+          post: action.post
+        }
+        return newGetPostByIdState;
       case EDIT_POST:
-        return action.post;
+        let newUpdatePostState = {
+          postList: [...state.postList],
+          post: action.post
+        }
+        return newUpdatePostState;
       case DELETE_POST:
-        return action.post;
+        let newDeletePostState = {
+          postList: [...state.postList],
+          post: action.post
+        }
+        return newDeletePostState;
       default:
         return state;
     }

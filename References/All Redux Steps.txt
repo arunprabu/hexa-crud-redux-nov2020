@@ -658,3 +658,15 @@ Other Important Notes:
 
 4) Webpack and it's config 
   npm run eject
+
+
+===
+Understanding Immutatability in Redux 
+--
+https://redux.js.org/recipes/structuring-reducers/immutable-update-patterns
+Solutions 
+1. Use ES2015 or else
+2. Use Immer JS https://immerjs.github.io/immer/docs/introduction
+   https://immerjs.github.io/immer/docs/example-reducer
+
+

@@ -52,6 +52,8 @@ class PostForm extends Component {
   }
 }
 
+
+
 // Step 10.2
 // after connecting props will be available in this comp. 
 // props will have dispatch method

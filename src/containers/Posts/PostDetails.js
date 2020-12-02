@@ -10,12 +10,13 @@ class PostDetails extends Component {
     console.log(this.props);
     // Reading URL Param
     const postId = this.props.match.params.postId;
-    this.props.dispatch(getPostById(postId));
+    // instead of dispatching from props 
+    this.props.onGetPostById(postId)
   }
 
   deletePostHandler = () => {
     const postId = this.props.match.params.postId;
-    this.props.dispatch(deletePost(postId));
+    this.props.onDeletePost(postId);
   }
   
   updatePostHandler = (e) => {
@@ -23,11 +24,13 @@ class PostDetails extends Component {
     console.log(this.getTitle.value);
     console.log(this.getContent.value);
 
-    this.props.dispatch(updatePost({
+    let draftPost = {
       id: this.props.post.id,
       title: this.getTitle.value,
       body: this.getContent.value
-    }));
+    }
+
+    this.props.onUpdatePost(draftPost);
   }
 
   render() {
@@ -105,8 +108,17 @@ class PostDetails extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    post: state.posts
+    post: state.postData.post
   }
 }
 
-export default connect(mapStateToProps)(PostDetails);
+// mapDispatchToProps with actions
+const mapDispatchToProps = ( dispatch ) => {
+  return {
+    onGetPostById: (id) => dispatch(getPostById(id)),
+    onDeletePost: (postId) => dispatch(deletePost(postId)),
+    onUpdatePost: (draftPost) => dispatch(updatePost(draftPost))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PostDetails);
