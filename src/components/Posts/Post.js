@@ -21,6 +21,7 @@ const Post = ({ id, title, body }) => {
   )
 }
 
+
 Post.propTypes = {
   id: PropTypes.number,
   title: PropTypes.string,
